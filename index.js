@@ -24,10 +24,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", async (req, res) => {
+app.get("/profiles", async (req, res) => {
   const result = await client.query("SELECT * FROM profiles");
   res.json(result.rows);
   console.log(result.rows);
+});
+app.get("/profiles/:id", async (req, res) => {
+  const input = req.params.id;
+  console.log(req.params.id);
+  const result = await client.query(
+    `SELECT * FROM profiles WHERE id = ${input}`
+  );
+  res.json(result.rows);
 });
 
 app.listen(port, () => {
