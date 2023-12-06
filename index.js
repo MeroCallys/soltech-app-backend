@@ -12,7 +12,6 @@ const postgres = {
 };
 
 const client = new pg.Client(postgres);
-client.connect();
 client.on("error", (err) => {
   console.error("something bad has happened!", err.stack);
 });
@@ -20,6 +19,7 @@ client.on("error", (err) => {
 const app = express();
 const port = 3000;
 
+client.connect();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,7 +31,6 @@ app.get("/profiles", async (req, res) => {
 });
 app.get("/profiles/:id", async (req, res) => {
   const input = req.params.id;
-  console.log(req.params.id);
   const result = await client.query(
     `SELECT * FROM profiles WHERE id = ${input}`
   );
